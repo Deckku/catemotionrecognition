@@ -1,0 +1,21 @@
+# .readthedocs.yaml
+
+version: 2
+
+# Configuration du système d'exploitation et de la langue
+build:
+  os: ubuntu-22.04
+  tools:
+    python: "3.11"  # Version de Python à utiliser
+
+
+# Génération de la documentation
+sphinx:
+  configuration: source/conf.py  # Chemin vers le fichier de configuration Sphinx
+
+phyton:
+    install:
+    - requirements: requirements.txt
+
+
+
