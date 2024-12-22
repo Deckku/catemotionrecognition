@@ -3,8 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Introduction about catemotionrecognition Project
-=================================================
+Welcome to cat emotion recognition Project
+==========================================
 
 Table des Matières
 ==================
