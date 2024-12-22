@@ -17,28 +17,48 @@ Introduction about catemotionrecognition Project
    combinaison
    déploiement
    conclusion
-# Table des Matières
-
-1. [Résumé](#résumé)
-2. [Introduction](#introduction)
-3. [Reconnaissance des émotions du chat par la voix](#reconnaissance-des-émotions-du-chat-par-la-voix)
-   - [Collecte des données](#collecte-des-données)
-   - [Prétraitement des données](#prétraitement-des-données)
-   - [Construction des modèles](#construction-des-modèles)
-   - [Évaluation des performances](#évaluation-des-performances)
-4. [Reconnaissance des émotions du chat par l’image](#reconnaissance-des-émotions-du-chat-par-limage)
-   - [Collecte des données](#collecte-des-données-1)
-   - [Prétraitement des données](#prétraitement-des-données-1)
-   - [Construction des modèles](#construction-des-modèles-1)
-   - [Évaluation des performances](#évaluation-des-performances-1)
-5. [Reconnaissance de l’état de santé du chat par l’image](#reconnaissance-de-létat-de-santé-du-chat-par-limage)
-   - [Collecte des données](#collecte-des-données-2)
-   - [Prétraitement des données](#prétraitement-des-données-2)
-   - [Construction des modèles](#construction-des-modèles-2)
-   - [Évaluation des performances](#évaluation-des-performances-2)
-6. [Combinaison des modèles](#combinaison-des-modèles)
-7. [Déploiement](#déploiement)
-8. [Conclusion](#conclusion)
+Table des Matières
+==================
+1. [Résumé]
+=========================================================
+2. [Introduction]
+=========================================================
+3. [Reconnaissance des émotions du chat par la voix]
+=========================================================
+   - [Collecte des données]
+   =========================================================
+   - [Prétraitement des données]
+   =========================================================
+   - [Construction des modèles]
+   =========================================================
+   - [Évaluation des performances]
+   =========================================================
+4. [Reconnaissance des émotions du chat par l’image]
+=========================================================
+   - [Collecte des données]
+   =========================================================
+   - [Prétraitement des données]
+   =========================================================
+   - [Construction des modèles]
+   =========================================================
+   - [Évaluation des performances]
+   =========================================================
+5. [Reconnaissance de l’état de santé du chat par l’image]
+=========================================================
+   - [Collecte des données]
+   =========================================================
+   - [Prétraitement des données]
+   =========================================================
+   - [Construction des modèles]
+   =============================
+   - [Évaluation des performances]
+   ===============================
+6. [Combinaison des modèles]
+=============================
+7. [Déploiement]
+=============================
+8. [Conclusion]
+=============================
 
 ---
 
