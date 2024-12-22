@@ -5,6 +5,18 @@
 
 Introduction about catemotionrecognition Project
 =================================================
+.. toctree::
+   :maxdepth: 2
+   :caption: Table des Matières
+
+   résumé
+   introduction
+   reconnaissance_voix
+   reconnaissance_image
+   reconnaissance_santé
+   combinaison
+   déploiement
+   conclusion
 # Table des Matières
 
 1. [Résumé](#résumé)
