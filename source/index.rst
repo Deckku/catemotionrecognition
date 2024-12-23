@@ -11,35 +11,20 @@ Table des Matières
 1. Résumé
 2. Introduction
 3. Reconnaissance des émotions du chat par la voix
----
    - Collecte des données
----
    - Prétraitement des données
----
    - Construction des modèles
----
    - Évaluation des performances
----
 4. Reconnaissance des émotions du chat par l’image
----
    - Collecte des données
----
    - Prétraitement des données
----
    - Construction des modèles
----
    - Évaluation des performances
----
 5. Reconnaissance de l’état de santé du chat par l’image
----
    - Collecte des données
----
    - Prétraitement des données
----
    - Construction des modèles
----
    - Évaluation des performances
----
 6. Combinaison des modèles
 7. Déploiement
 8. Conclusion
