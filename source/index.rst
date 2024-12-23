@@ -20,12 +20,12 @@ Table des Matières
 
 1. Résumé
 =========
-   Notre projet consiste à élaborer un modèle de machine learning capable de diagnostiquer l’état et l’humeur de l’animal domestique, le chat, en temps réel. On a conçu 3 modèles. Le 1er permet de générer une prédiction sur l’humeur à partir des images capturées, le 2e consiste à détecter aussi l’humeur, mais cette fois à partir des audios comme input. Le 3e permet de faire une prédiction sur l’état du chat à partir des images, en identifiant si son état est normal ou s’il est malade. Ensuite, on a combiné ces modèles pour générer une prédiction sur des vidéos réelles captées du chat. Enfin, on a fait le déploiement sur Streamlit et une application bureau.
+Notre projet consiste à élaborer un modèle de machine learning capable de diagnostiquer l’état et l’humeur de l’animal domestique, le chat, en temps réel. On a conçu 3 modèles. Le 1er permet de générer une prédiction sur l’humeur à partir des images capturées, le 2e consiste à détecter aussi l’humeur, mais cette fois à partir des audios comme input. Le 3e permet de faire une prédiction sur l’état du chat à partir des images, en identifiant si son état est normal ou s’il est malade. Ensuite, on a combiné ces modèles pour générer une prédiction sur des vidéos réelles captées du chat. Enfin, on a fait le déploiement sur Streamlit et une application bureau.
 ---
 
 2. Introduction
 ===============
-   Avec l’avancée rapide des technologies en intelligence artificielle et en machine learning, de nouvelles opportunités se présentent pour améliorer le bien-être des animaux domestiques. Notre projet s’inscrit dans cette démarche en visant à développer une solution innovante capable de diagnostiquer en temps réel l’état de santé et l’humeur d’un animal domestique, en particulier le chat. Ce travail repose sur l’analyse de données multimodales telles que les images, les audios, et les vidéos pour fournir des informations précises et utiles aux propriétaires d’animaux.
+Avec l’avancée rapide des technologies en intelligence artificielle et en machine learning, de nouvelles opportunités se présentent pour améliorer le bien-être des animaux domestiques. Notre projet s’inscrit dans cette démarche en visant à développer une solution innovante capable de diagnostiquer en temps réel l’état de santé et l’humeur d’un animal domestique, en particulier le chat. Ce travail repose sur l’analyse de données multimodales telles que les images, les audios, et les vidéos pour fournir des informations précises et utiles aux propriétaires d’animaux.
 À travers ce projet, nous avons conçu et combiné plusieurs modèles de machine learning pour détecter non seulement les émotions du chat, mais aussi son état de santé, et avons déployé la solution sur des plateformes accessibles comme Streamlit et une application de bureau. L’objectif final est d’offrir un outil pratique et efficace permettant une interaction enrichie entre les propriétaires et leurs animaux tout en veillant à leur bien-être.
 
 ---
@@ -49,15 +49,65 @@ On a trouvé sur le platforme kaggle une dataset de taille 100 audios de meme di
 ===========================
 Le prétraitement des données inclut la division en ensembles d'entraînement (80%) et de validation (20%).
 """
-.. code-block:: python
-    :caption: Division de dataset
-    :linenos:
 
-    from ubml.train_test import regression_train_test
-.. literalinclude:: ../catemotionrecognition/source/split.py
-    :language: python
-    :linenos:
-    :caption: Code Python
+.. code-block:: python
+import os
+import shutil
+import random
+import librosa
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.preprocessing import LabelEncoder
+
+# Définition des répertoires
+source_dir = '/content/drive/MyDrive/NAYA_DATA_AUG1X'
+train_dir = '/content/drive/MyDrive/catemotionrecognitionbyaudio/datasets/train'
+val_dir = '/content/drive/MyDrive/catemotionrecognitionbyaudio/datasets/val'
+
+# Liste des classes
+def classes():
+    return ['Angry', 'Defence', 'Fighting', 'Happy', 'HuntingMind',
+            'Mating', 'MotherCall', 'Paining', 'Resting', 'Warning']
+
+# Fonction de répartition des données
+def split_data(source_dir, train_dir, val_dir, split_ratio=0.8):
+    os.makedirs(train_dir, exist_ok=True)
+    os.makedirs(val_dir, exist_ok=True)
+
+    for class_name in classes():
+        class_train_dir = os.path.join(train_dir, class_name)
+        class_val_dir = os.path.join(val_dir, class_name)
+        os.makedirs(class_train_dir, exist_ok=True)
+        os.makedirs(class_val_dir, exist_ok=True)
+
+        class_dir = os.path.join(source_dir, class_name)
+        if not os.path.exists(class_dir):
+            print(f"[AVERTISSEMENT] Le dossier {class_name} n'existe pas dans {source_dir}.")
+            continue
+
+        audio_files = [f for f in os.listdir(class_dir) if os.path.isfile(os.path.join(class_dir, f))]
+
+        if not audio_files:
+            print(f"[AVERTISSEMENT] Aucun fichier audio trouvé dans {class_dir}.")
+            continue
+
+        random.shuffle(audio_files)
+        train_size = int(len(audio_files) * split_ratio)
+        train_files = audio_files[:train_size]
+        val_files = audio_files[train_size:]
+
+        for file in train_files:
+            shutil.move(os.path.join(class_dir, file), os.path.join(class_train_dir, file))
+
+        for file in val_files:
+            shutil.move(os.path.join(class_dir, file), os.path.join(class_val_dir, file))
+
+        print(f"[INFO] {len(train_files)} fichiers déplacés vers {class_train_dir}")
+        print(f"[INFO] {len(val_files)} fichiers déplacés vers {class_val_dir}")
+
+# Appel de la fonction pour diviser les données
+split_data(source_dir, train_dir, val_dir)
+
 """
 3. Préparation des données audio
 ===============================
@@ -240,4 +290,3 @@ Indices and tables
    combinaison
    déploiement
    conclusion
-
