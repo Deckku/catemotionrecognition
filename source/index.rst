@@ -39,38 +39,37 @@ Environnement : Google Colaboratory
 Bibliothèques nécessaires : os, shutil, random
 
 1. Collecte des données
-=======================
+-----------------------
 La dataset utilisée comprend 5938 fichiers audio répartis en 10 classes :
 ['Angry', 'Defence', 'Fighting', 'Happy', 'HuntingMind', 'Mating', 'MotherCall', 'Paining', 'Resting', 'Warning'].
 Cette dataset n'est pas directement disponible en ligne et a été obtenue via Monsieur Yagya Raj Pandeya.
 On a trouvé sur le platforme kaggle une dataset de taille 100 audios de meme distribution de classe que l'on a laissé pour la phase de test.
 
 2. Prétraitement des données
-===========================
+----------------------------
 Le prétraitement des données inclut la division en ensembles d'entraînement (80%) et de validation (20%).
 """
-
 .. code-block:: python
-import os
-import shutil
-import random
-import librosa
-import numpy as np
-import matplotlib.pyplot as plt
-from sklearn.preprocessing import LabelEncoder
+ import os
+ import shutil
+ import random
+ import librosa
+ import numpy as np
+ import matplotlib.pyplot as plt
+ from sklearn.preprocessing import LabelEncoder
 
-# Définition des répertoires
-source_dir = '/content/drive/MyDrive/NAYA_DATA_AUG1X'
-train_dir = '/content/drive/MyDrive/catemotionrecognitionbyaudio/datasets/train'
-val_dir = '/content/drive/MyDrive/catemotionrecognitionbyaudio/datasets/val'
+ #Définition des répertoires
+ source_dir = '/content/drive/MyDrive/NAYA_DATA_AUG1X'
+ train_dir = '/content/drive/MyDrive/catemotionrecognitionbyaudio/datasets/train'
+ val_dir = '/content/drive/MyDrive/catemotionrecognitionbyaudio/datasets/val'
 
-# Liste des classes
-def classes():
+ # Liste des classes
+ def classes():
     return ['Angry', 'Defence', 'Fighting', 'Happy', 'HuntingMind',
             'Mating', 'MotherCall', 'Paining', 'Resting', 'Warning']
 
-# Fonction de répartition des données
-def split_data(source_dir, train_dir, val_dir, split_ratio=0.8):
+ # Fonction de répartition des données
+ def split_data(source_dir, train_dir, val_dir, split_ratio=0.8):
     os.makedirs(train_dir, exist_ok=True)
     os.makedirs(val_dir, exist_ok=True)
 
@@ -105,16 +104,15 @@ def split_data(source_dir, train_dir, val_dir, split_ratio=0.8):
         print(f"[INFO] {len(train_files)} fichiers déplacés vers {class_train_dir}")
         print(f"[INFO] {len(val_files)} fichiers déplacés vers {class_val_dir}")
 
-# Appel de la fonction pour diviser les données
-split_data(source_dir, train_dir, val_dir)
+ # Appel de la fonction pour diviser les données
+ split_data(source_dir, train_dir, val_dir)
 
-"""
 3. Préparation des données audio
-===============================
+---------------------------------
 Nettoyage, transformation en spectrogrammes, normalisation et encodage des étiquettes.
 """
-
-def clean_audio(y, sr, low_freq=200, high_freq=8000):
+.. code-block:: python
+ def clean_audio(y, sr, low_freq=200, high_freq=8000):
     y_filtered = librosa.effects.preemphasis(y)
     stft = librosa.stft(y_filtered, n_fft=2048, hop_length=512)
     freqs = librosa.fft_frequencies(sr=sr, n_fft=2048)
@@ -122,7 +120,7 @@ def clean_audio(y, sr, low_freq=200, high_freq=8000):
     stft_filtered = stft[mask, :]
     return librosa.istft(stft_filtered, hop_length=512)
 
-def extract_spectrogram(y, sr, max_pad_len=128):
+ def extract_spectrogram(y, sr, max_pad_len=128):
     try:
         S = librosa.feature.melspectrogram(y=y, sr=sr, n_mels=128, fmax=sr / 2)
         log_S = librosa.power_to_db(S, ref=np.max)
@@ -132,7 +130,7 @@ def extract_spectrogram(y, sr, max_pad_len=128):
         print(f"[ERREUR] Extraction du spectrogramme échouée : {e}")
         return None
 
-def load_audio_files(base_dir, max_pad_len=128):
+ def load_audio_files(base_dir, max_pad_len=128):
     audio_data, labels = [], []
     for label in os.listdir(base_dir):
         folder_path = os.path.join(base_dir, label)
@@ -156,8 +154,8 @@ def load_audio_files(base_dir, max_pad_len=128):
 """
 Traitement des ensembles : entraînement, validation et test
 """
-
-def process_data_for_all_sets(train_dir, val_dir, test_dir, max_pad_len=128):
+.. code-block:: python
+ def process_data_for_all_sets(train_dir, val_dir, test_dir, max_pad_len=128):
     X_train, y_train = load_audio_files(train_dir, max_pad_len)
     X_val, y_val = load_audio_files(val_dir, max_pad_len)
     X_test, y_test = load_audio_files(test_dir, max_pad_len)
@@ -177,8 +175,8 @@ def process_data_for_all_sets(train_dir, val_dir, test_dir, max_pad_len=128):
 """
 Visualisation de spectrogrammes aléatoires
 """
-
-def display_random_spectrograms(data, labels, class_names, num_samples=5):
+.. code-block:: python
+ def display_random_spectrograms(data, labels, class_names, num_samples=5):
     indices = random.sample(range(len(data)), min(num_samples, len(data)))
     for idx in indices:
         plt.imshow(data[idx], aspect='auto', origin='lower', cmap='viridis')
@@ -186,11 +184,11 @@ def display_random_spectrograms(data, labels, class_names, num_samples=5):
         plt.colorbar(format='%+2.0f dB')
         plt.show()
 
-# Exemple de traitement des données
-X_train, X_val, X_test, y_train, y_val, y_test, label_encoder = process_data_for_all_sets(
+ # Exemple de traitement des données
+ X_train, X_val, X_test, y_train, y_val, y_test, label_encoder = process_data_for_all_sets(
     train_dir, val_dir, '/content/drive/MyDrive/catemotionrecognitionbyaudio/datasets/test'
-)
-display_random_spectrograms(X_train, y_train, label_encoder.classes_)
+ )
+ display_random_spectrograms(X_train, y_train, label_encoder.classes_)
 
 Image des spectrogrammes combinés
 ---------------------------------
