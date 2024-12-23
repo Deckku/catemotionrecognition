@@ -45,18 +45,177 @@ Avec l’avancée rapide des technologies en intelligence artificielle et en mac
 3. Reconnaissance des émotions du chat par la voix
 ==================================================
 ---
+"""
+Guide de préparation des données pour la reconnaissance d'émotions par audio
+Environnement : Google Colaboratory
+Bibliothèques nécessaires : os, shutil, random
 
-### Collecte des données
+1. Collecte des données
+=======================
+La dataset utilisée comprend 5938 fichiers audio répartis en 10 classes :
+['Angry', 'Defence', 'Fighting', 'Happy', 'HuntingMind', 'Mating', 'MotherCall', 'Paining', 'Resting', 'Warning'].
+Cette dataset n'est pas directement disponible en ligne et a été obtenue via Monsieur Yagya Raj Pandeya.
+On a trouvé sur le platforme kaggle une dataset de taille 100 audios de meme distribution de classe que l'on a laissé pour la phase de test.
 
-Description des étapes pour collecter les données vocales des chats.
+2. Prétraitement des données
+===========================
+Le prétraitement des données inclut la division en ensembles d'entraînement (80%) et de validation (20%).
+"""
 
-### Prétraitement des données
+# Importation des bibliothèques nécessaires
+import os
+import shutil
+import random
+import librosa
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.preprocessing import LabelEncoder
 
-Techniques utilisées pour nettoyer et préparer les données vocales pour l’entraînement.
+# Définition des répertoires
+source_dir = '/content/drive/MyDrive/NAYA_DATA_AUG1X'
+train_dir = '/content/drive/MyDrive/catemotionrecognitionbyaudio/datasets/train'
+val_dir = '/content/drive/MyDrive/catemotionrecognitionbyaudio/datasets/val'
+
+# Liste des classes
+def classes():
+    return ['Angry', 'Defence', 'Fighting', 'Happy', 'HuntingMind',
+            'Mating', 'MotherCall', 'Paining', 'Resting', 'Warning']
+
+# Fonction de répartition des données
+def split_data(source_dir, train_dir, val_dir, split_ratio=0.8):
+    os.makedirs(train_dir, exist_ok=True)
+    os.makedirs(val_dir, exist_ok=True)
+
+    for class_name in classes():
+        class_train_dir = os.path.join(train_dir, class_name)
+        class_val_dir = os.path.join(val_dir, class_name)
+        os.makedirs(class_train_dir, exist_ok=True)
+        os.makedirs(class_val_dir, exist_ok=True)
+
+        class_dir = os.path.join(source_dir, class_name)
+        if not os.path.exists(class_dir):
+            print(f"[AVERTISSEMENT] Le dossier {class_name} n'existe pas dans {source_dir}.")
+            continue
+
+        audio_files = [f for f in os.listdir(class_dir) if os.path.isfile(os.path.join(class_dir, f))]
+
+        if not audio_files:
+            print(f"[AVERTISSEMENT] Aucun fichier audio trouvé dans {class_dir}.")
+            continue
+
+        random.shuffle(audio_files)
+        train_size = int(len(audio_files) * split_ratio)
+        train_files = audio_files[:train_size]
+        val_files = audio_files[train_size:]
+
+        for file in train_files:
+            shutil.move(os.path.join(class_dir, file), os.path.join(class_train_dir, file))
+
+        for file in val_files:
+            shutil.move(os.path.join(class_dir, file), os.path.join(class_val_dir, file))
+
+        print(f"[INFO] {len(train_files)} fichiers déplacés vers {class_train_dir}")
+        print(f"[INFO] {len(val_files)} fichiers déplacés vers {class_val_dir}")
+
+# Appel de la fonction pour diviser les données
+split_data(source_dir, train_dir, val_dir)
+
+"""
+3. Préparation des données audio
+===============================
+Nettoyage, transformation en spectrogrammes, normalisation et encodage des étiquettes.
+"""
+
+def clean_audio(y, sr, low_freq=200, high_freq=8000):
+    y_filtered = librosa.effects.preemphasis(y)
+    stft = librosa.stft(y_filtered, n_fft=2048, hop_length=512)
+    freqs = librosa.fft_frequencies(sr=sr, n_fft=2048)
+    mask = (freqs >= low_freq) & (freqs <= high_freq)
+    stft_filtered = stft[mask, :]
+    return librosa.istft(stft_filtered, hop_length=512)
+
+def extract_spectrogram(y, sr, max_pad_len=128):
+    try:
+        S = librosa.feature.melspectrogram(y=y, sr=sr, n_mels=128, fmax=sr / 2)
+        log_S = librosa.power_to_db(S, ref=np.max)
+        pad_width = max_pad_len - log_S.shape[1]
+        return np.pad(log_S, ((0, 0), (0, pad_width)), mode='constant') if pad_width > 0 else log_S[:, :max_pad_len]
+    except Exception as e:
+        print(f"[ERREUR] Extraction du spectrogramme échouée : {e}")
+        return None
+
+def load_audio_files(base_dir, max_pad_len=128):
+    audio_data, labels = [], []
+    for label in os.listdir(base_dir):
+        folder_path = os.path.join(base_dir, label)
+        if not os.path.isdir(folder_path):
+            continue
+
+        for file in os.listdir(folder_path):
+            if file.endswith('.mp3'):
+                try:
+                    y, sr = librosa.load(os.path.join(folder_path, file), sr=22050)
+                    y_cleaned = clean_audio(y, sr)
+                    spectrogram = extract_spectrogram(y_cleaned, sr, max_pad_len)
+                    if spectrogram is not None:
+                        audio_data.append(spectrogram)
+                        labels.append(label)
+                except Exception as e:
+                    print(f"[ERREUR] Erreur lors du traitement de {file}: {e}")
+
+    return np.array(audio_data), np.array(labels)
+
+"""
+Traitement des ensembles : entraînement, validation et test
+"""
+
+def process_data_for_all_sets(train_dir, val_dir, test_dir, max_pad_len=128):
+    X_train, y_train = load_audio_files(train_dir, max_pad_len)
+    X_val, y_val = load_audio_files(val_dir, max_pad_len)
+    X_test, y_test = load_audio_files(test_dir, max_pad_len)
+
+    mean, std = np.mean(X_train, axis=0), np.std(X_train, axis=0)
+    X_train = (X_train - mean) / (std + 1e-8)
+    X_val = (X_val - mean) / (std + 1e-8) if X_val.size > 0 else X_val
+    X_test = (X_test - mean) / (std + 1e-8) if X_test.size > 0 else X_test
+
+    label_encoder = LabelEncoder().fit(np.concatenate([y_train, y_val, y_test]))
+    y_train = label_encoder.transform(y_train)
+    y_val = label_encoder.transform(y_val) if y_val.size > 0 else []
+    y_test = label_encoder.transform(y_test) if y_test.size > 0 else []
+
+    return X_train, X_val, X_test, y_train, y_val, y_test, label_encoder
+
+"""
+Visualisation de spectrogrammes aléatoires
+"""
+
+def display_random_spectrograms(data, labels, class_names, num_samples=5):
+    indices = random.sample(range(len(data)), min(num_samples, len(data)))
+    for idx in indices:
+        plt.imshow(data[idx], aspect='auto', origin='lower', cmap='viridis')
+        plt.title(f"Classe: {class_names[labels[idx]]}")
+        plt.colorbar(format='%+2.0f dB')
+        plt.show()
+
+# Exemple de traitement des données
+X_train, X_val, X_test, y_train, y_val, y_test, label_encoder = process_data_for_all_sets(
+    train_dir, val_dir, '/content/drive/MyDrive/catemotionrecognitionbyaudio/datasets/test'
+)
+display_random_spectrograms(X_train, y_train, label_encoder.classes_)
+
+Image des spectrogrammes combinés
+---------------------------------
+
+Voici une représentation visuelle des spectrogrammes combinés pour chaque classe :
+
+.. image:: imagedoc/combined_mel_spectrograms.png
+    :alt: Spectrogrammes combinés
+    :width: 800px
+    :align: center
 
 ### Construction des modèles
-
-Architecture et algorithmes choisis pour le modèle de reconnaissance des émotions basé sur la voix.
+On a conçu un modele CNN
 
 ### Évaluation des performances
 
