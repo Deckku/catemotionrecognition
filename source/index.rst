@@ -267,7 +267,8 @@ Une architecture CNN (Convolutional Neural Network) a été choisie pour ses per
 
 
 Chaque image est lue, redimensionnée, normalisée et étiquetée avec une catégorie spécifique correspondant à l’émotion ou à l'état de santé.
-3. Construction du modele
+
+5. Construction du modele
 ---------------------------------
 Une architecture CNN (Convolutional Neural Network) a été choisie pour ses performances éprouvées dans le traitement d'images. Le modèle a été construit avec plusieurs couches convolutives suivies de couches de pooling et d’une couche dense finale. L’optimisation a été réalisée à l’aide de l’algorithme Adam, et des fonctions d’activation ReLU ont été utilisées.
 
@@ -299,11 +300,9 @@ Les images peuvent provenir de diverses sources, mais elles doivent être étiqu
 
 ---
 
-6.  Combinaison des modèles
-===========================
 
-6. Combinaison des modèles pour le traitement vidéo
-====================================================
+6. Combinaison des modèles 
+==========================
 
 Le but de cette étape est de combiner les trois modèles de traitement d'image pour offrir une solution complète de classification vidéo. Ces modèles incluent :
 
@@ -327,7 +326,7 @@ Suivi dynamique dans la vidéo : En utilisant une fenêtre temporelle (par exemp
 .. code-block::python
 
 
- def process_video(video_path):
+  def process_video(video_path):
     try:
         # Process video frame
         cap = cv2.VideoCapture(video_path)
