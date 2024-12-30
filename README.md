@@ -72,11 +72,6 @@ This project was created by:
 
 ---
 
-## License
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
-
----
-
 ## Acknowledgments
 - Inspired by the love for cats around the world.
 - Thanks to all contributors and community members who share their cat stories.
