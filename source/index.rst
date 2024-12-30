@@ -218,10 +218,11 @@ Mesures et résultats des tests effectués sur le modèle.
 4. Reconnaissance des émotions du chat par l’image
 ==================================================
 
-Collecte des données
+1. Collecte des données
+-----------------------
 Les images nécessaires ont été collectées à partir de diverses sources publiques et bases de données spécialisées, garantissant une diversité de visages et d'expressions émotionnelles. Des critères d’inclusion spécifiques, tels que la résolution et la qualité des images, ont été définis pour assurer la pertinence des données. Des autorisations ont été respectées pour les sources publiques afin de garantir un usage éthique.
 
-3. Préparation des données image
+2. Préparation des données image
 ---------------------------------
 Nettoyage, transformation en spectrogrammes, normalisation et encodage des étiquettes.
 
@@ -265,10 +266,12 @@ Une architecture CNN (Convolutional Neural Network) a été choisie pour ses per
 4. Reconnaissance de l’état de santé du chat par l’image
 ==========================================================
 
+1. Collecte des données
+-----------------------
 
 Chaque image est lue, redimensionnée, normalisée et étiquetée avec une catégorie spécifique correspondant à l’émotion ou à l'état de santé.
 
-5. Construction du modele
+2. Construction du modele
 ---------------------------------
 Une architecture CNN (Convolutional Neural Network) a été choisie pour ses performances éprouvées dans le traitement d'images. Le modèle a été construit avec plusieurs couches convolutives suivies de couches de pooling et d’une couche dense finale. L’optimisation a été réalisée à l’aide de l’algorithme Adam, et des fonctions d’activation ReLU ont été utilisées.
 
@@ -370,11 +373,13 @@ Suivi dynamique dans la vidéo : En utilisant une fenêtre temporelle (par exemp
 
 7. Déploiement
 ==============
-## Vue d'ensemble
+1. Vue d'ensemble
+-----------------
 
 L'application **Cat Mood & Health Analyzer** a été créée en utilisant **Tkinter**, une bibliothèque Python pour la création d'interfaces graphiques. L'interface est conçue pour être simple et intuitive, permettant à l'utilisateur de télécharger des fichiers multimédia (images, vidéos, ou audio) via un bouton de sélection. Lorsqu'un fichier est téléchargé, l'application traite le contenu à l'aide de modèles pré-entrainés pour analyser les émotions, l'état de santé et l'humeur du chat. Les résultats sont affichés dans l'interface, accompagnés d'un message personnalisé. L'application comprend également un système de gestion des erreurs pour informer l'utilisateur de tout problème de traitement. Enfin, l'application peut être convertie en un exécutable autonome à l'aide de **PyInstaller** pour une utilisation sans installation préalable de Python.
 
-## Aperçu
+2. Aperçu
+---------
 
 Le Cat Mood & Health Analyzer est une application conviviale conçue pour analyser l'humeur et l'état de santé des chats à partir de divers fichiers multimédias, tels que des images, des vidéos et des enregistrements audio. En utilisant des modèles d'apprentissage automatique avancés, l'outil offre des informations sur les émotions et le bien-être de votre chat. L'application utilise trois modèles principaux :
 
@@ -384,7 +389,8 @@ Le Cat Mood & Health Analyzer est une application conviviale conçue pour analys
 
 En téléchargeant une photo, une vidéo ou un enregistrement audio d'un chat, les utilisateurs peuvent recevoir une analyse détaillée comprenant l'état émotionnel du chat, son état de santé et son humeur audio, aidant ainsi les propriétaires à mieux comprendre les besoins de leur chat. L'interface graphique intuitive facilite l'interaction, et elle fournit des résultats en temps réel avec des retours détaillés basés sur l'analyse.
 
-## Fonctionnalités
+3. Fonctionnalités
+------------------
 
 - **Analyse d'image** : Téléchargez une image nette de votre chat pour la prédiction de l'émotion et de la santé.
 - **Analyse vidéo** : Téléchargez des vidéos, et l'application traitera à la fois le contenu visuel et audio pour fournir une analyse plus complète.
@@ -392,7 +398,8 @@ En téléchargeant une photo, une vidéo ou un enregistrement audio d'un chat, l
 - **Interface conviviale** : Le design simple et moderne le rend accessible à tous les amoureux des chats, des propriétaires occasionnels aux professionnels.
 - **Retour en temps réel** : Recevez immédiatement un retour sur l'état émotionnel et de santé de votre chat avec des messages faciles à comprendre.
 
-## Commencer
+4. Commencer
+------------
 
 1. Lancez l'application.
 2. Téléchargez une image, une vidéo ou un fichier audio de votre chat.
@@ -636,10 +643,13 @@ En téléchargeant une photo, une vidéo ou un enregistrement audio d'un chat, l
 
 8. Conclusion
 =============
-Mise en place d’un système interactif permettant de découvrir des profils et des faits intéressants sur les chats.
-Ajout de nouvelles fonctionnalités, comme une section éducative sur la santé et le bien-être des chats.
-Amélioration des outils collaboratifs pour favoriser la participation de la communauté.
-Développement d’une application mobile pour une accessibilité accrue.
+
+Le projet **Cat Mood & Health Analyzer** représente une avancée intéressante dans l'analyse du bien-être des animaux de compagnie, en particulier les chats. Grâce à l'intelligence artificielle et aux modèles d'apprentissage profond, il offre une méthode automatisée pour évaluer l'état émotionnel et de santé des chats à partir de simples fichiers multimédia. 
+
+À l'avenir, nous envisageons d'élargir les capacités de cette application en ajoutant de nouvelles fonctionnalités, telles que la détection d'autres maladies ou comportements spécifiques, et en affinant les modèles pour augmenter leur précision. Nous souhaitons également intégrer des fonctionnalités permettant aux vétérinaires et propriétaires d'animaux de suivre l'évolution de la santé des chats au fil du temps.
+
+L'application pourrait trouver des applications dans diverses industries, telles que la santé animale, les refuges pour animaux, et même dans les maisons pour surveiller le bien-être des animaux domestiques. En simplifiant l'analyse du comportement des chats, ce projet pourrait offrir un outil précieux pour améliorer la qualité de vie de nos compagnons félins.
+
 
 ---
 
