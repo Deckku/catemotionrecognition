@@ -3,7 +3,7 @@ Welcome to catcompanion Project
 ==========================================
 
 .. image:: cats.jpg
-   :alt: Demo Image
+   :alt: Catcompanion core
    :width: 800px
    :align: center
 
@@ -256,6 +256,20 @@ Voici une représentation visuelle des spectrogrammes combinés pour chaque clas
         epochs=30,
         batch_size=32
     )
+
+
+
+.. image:: matrix.jpg
+   :alt: Confusion matrix
+   :width: 800px
+   :align: center
+
+.. image:: table.jpg
+   :alt: Metrics
+   :width: 800px
+   :align: center
+
+
 
 4. Reconnaissance des émotions du chat par l’image
 ==================================================
