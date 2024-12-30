@@ -356,7 +356,7 @@ root.mainloop()
 import PyInstaller.__main__
 
 PyInstaller.__main__.run([
-    '--name=%s' % "CatMoodHealthAnalyzer",
+    '--name=%s' % "CatCompanion",
     '--onefile',
     '--windowed',
     'c:\\Users\\adnan\\Desktop\\IA\\cursor\\import tkinter as tk.py'
