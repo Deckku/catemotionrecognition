@@ -321,8 +321,10 @@ Traitement par le modèle de santé : La même image est ensuite envoyée au mod
 Fusion des résultats : Les prédictions des deux modèles peuvent être combinées pour donner un aperçu global de l'état de santé et des émotions du chat pendant la vidéo. Cela pourrait se faire par :
 
 Moyenne ou pondération des résultats des deux modèles pour une prise de décision finale par frame.
+
 Affichage des résultats combinés à chaque frame sous forme d'annotations (par exemple, afficher à la fois l'émotion du chat et son état de santé).
 Suivi dynamique dans la vidéo : En utilisant une fenêtre temporelle (par exemple, sur plusieurs frames), vous pouvez suivre l'évolution des émotions et de l'état de santé du chat au cours du temps. Cette approche peut être utilisée pour détecter des changements dans les émotions ou l'état de santé du chat dans la vidéo.
+
 .. code-block::python
 
 
