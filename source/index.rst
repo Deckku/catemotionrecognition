@@ -674,17 +674,17 @@ En téléchargeant une photo, une vidéo ou un enregistrement audio d'un chat, l
 ---
 
 
-.. image:: /_static/catemotionrecognition/source/1.png
+.. image:: 1.png
    :alt: Demo Image
    :width: 800px
    :align: center
 
-.. image:: /_static/2.jpg
+.. image:: 2.png
    :alt: Demo vid
    :width: 800px
    :align: center
 
-.. image:: /_static/3.jpg
+.. image:: 3.png
    :alt: Demo Image
    :width: 800px
    :align: center
