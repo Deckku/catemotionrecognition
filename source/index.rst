@@ -239,8 +239,11 @@ Nettoyage, transformation en spectrogrammes, normalisation et encodage des étiq
             images.append(img_array)
             labels.append(class_idx)
     return np.array(images), to_categorical(np.array(labels), num_classes=NUM_CLASSES)
-    
-Construction des modèles
+
+
+
+3. Construction du modele
+---------------------------------
 Une architecture CNN (Convolutional Neural Network) a été choisie pour ses performances éprouvées dans le traitement d'images. Le modèle a été construit avec plusieurs couches convolutives suivies de couches de pooling et d’une couche dense finale. L’optimisation a été réalisée à l’aide de l’algorithme Adam, et des fonctions d’activation ReLU ont été utilisées.
 
 .. code-block:: python
