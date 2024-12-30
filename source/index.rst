@@ -301,9 +301,71 @@ Les images peuvent provenir de diverses sources, mais elles doivent être étiqu
 
 6.  Combinaison des modèles
 ===========================
-Stratégies utilisées pour combiner les modèles d’analyse vocale et visuelle afin de fournir des prédictions plus complètes.
 
----
+6. Combinaison des modèles pour le traitement vidéo
+====================================================
+
+Le but de cette étape est de combiner les trois modèles de traitement d'image pour offrir une solution complète de classification vidéo. Ces modèles incluent :
+
+Modèle de reconnaissance des émotions du chat : Ce modèle identifie les émotions du chat à partir d'images fixes, telles que l'angoisse, la joie, la peur, etc.
+Modèle de reconnaissance de l'état de santé du chat : Ce modèle est chargé de déterminer si le chat est malade ou en bonne santé en analysant des images.
+Modèle de traitement vidéo : Cette partie combine les prédictions des deux premiers modèles sur chaque image d'une vidéo pour fournir des résultats dynamiques (sur les émotions et l'état de santé) tout au long de la séquence vidéo.
+Stratégies pour combiner les modèles
+Le défi ici est d'intégrer ces deux modèles (émotions et santé) dans une chaîne de traitement vidéo. Voici les principales étapes de la combinaison des modèles :
+
+Extraction des images vidéo : Pour analyser une vidéo, il faut d'abord en extraire les images (frames). Ces images sont ensuite envoyées aux deux modèles pour obtenir des prédictions individuelles.
+
+Traitement par le modèle d'émotions : Chaque image extraite de la vidéo est envoyée au modèle de reconnaissance des émotions. Le modèle génère une prédiction sur l'émotion du chat à partir de l'image.
+
+Traitement par le modèle de santé : La même image est ensuite envoyée au modèle de reconnaissance de l'état de santé, qui prédit si le chat est malade ou non.
+
+Fusion des résultats : Les prédictions des deux modèles peuvent être combinées pour donner un aperçu global de l'état de santé et des émotions du chat pendant la vidéo. Cela pourrait se faire par :
+
+Moyenne ou pondération des résultats des deux modèles pour une prise de décision finale par frame.
+Affichage des résultats combinés à chaque frame sous forme d'annotations (par exemple, afficher à la fois l'émotion du chat et son état de santé).
+Suivi dynamique dans la vidéo : En utilisant une fenêtre temporelle (par exemple, sur plusieurs frames), vous pouvez suivre l'évolution des émotions et de l'état de santé du chat au cours du temps. Cette approche peut être utilisée pour détecter des changements dans les émotions ou l'état de santé du chat dans la vidéo.
+.. code-block::python
+
+
+ def process_video(video_path):
+    try:
+        # Process video frame
+        cap = cv2.VideoCapture(video_path)
+        if not cap.isOpened():
+            messagebox.showerror("Error", "Could not open video file")
+            return None, None, None, None
+
+        ret, frame = cap.read()
+        if not ret:
+            messagebox.showerror("Error", "Could not read video frame")
+            return None, None, None, None
+
+        temp_frame = os.path.join(os.path.dirname(video_path), "temp_frame.jpg")
+        cv2.imwrite(temp_frame, frame)
+        
+        # Process the frame for visual analysis
+        emotion, sickness, confidence = process_image(temp_frame)
+        if os.path.exists(temp_frame):
+            os.remove(temp_frame)
+        cap.release()
+
+        # Extract and process audio
+        audio_mood = None
+        temp_audio = extract_audio(video_path)
+        if temp_audio:
+            audio_mood = process_audio(temp_audio)
+            if os.path.exists(temp_audio):
+                os.remove(temp_audio)
+        else:
+            messagebox.showwarning("Warning", "Could not analyze audio. Make sure the video contains audio.")
+
+        if emotion and sickness:
+            return emotion, sickness, confidence, audio_mood
+        return None, None, None, None
+
+    except Exception as e:
+        messagebox.showerror("Error", f"Failed to process video: {str(e)}")
+        return None, None, None, None
 
 7. Déploiement
 ==============
