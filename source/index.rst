@@ -1,10 +1,12 @@
-catemotionrecognition documentation master file, created by
-sphinx-quickstart on Thu Dec  5 23:02:11 2024.
-You can adapt this file completely to your liking, but it should at least
-contain the root `toctree` directive.
 
-Welcome to cat emotion recognition Project
+Welcome to catcompanion Project
 ==========================================
+
+.. image:: cats.jpg
+   :alt: Demo Image
+   :width: 800px
+   :align: center
+
 
 Table des Matières
 ==================
@@ -155,6 +157,39 @@ Nettoyage, transformation en spectrogrammes, normalisation et encodage des étiq
                         print(f"[ERREUR] Erreur lors du traitement de {file}: {e}")
 
         return np.array(audio_data), np.array(labels)
+
+3. Creation du modele CNN
+---------------------------------
+.. code-block:: python
+
+    def create_model(input_shape, num_classes):
+        """
+        Create a convolutional neural network model.
+
+        Parameters:
+            input_shape (tuple): Shape of the input data, e.g., (height, width, channels).
+            num_classes (int): Number of output classes for classification.
+
+        Returns:
+            keras.Model: A compiled Sequential model.
+        """
+        model = models.Sequential([
+            layers.Conv2D(32, (3, 3), activation='relu', input_shape=input_shape),
+            layers.MaxPooling2D((2, 2)),
+            layers.Conv2D(64, (3, 3), activation='relu'),
+            layers.MaxPooling2D((2, 2)),
+            layers.Conv2D(128, (3, 3), activation='relu'),
+            layers.GlobalAveragePooling2D(),
+            layers.Dense(128, activation='relu'),
+            layers.Dropout(0.3),
+            layers.Dense(num_classes, activation='softmax')
+        ])
+        model.compile(optimizer='adam', 
+                      loss='sparse_categorical_crossentropy', 
+                      metrics=['accuracy'])
+        return model
+
+
 
 Traitement des ensembles : entraînement, validation et test
 -----------------------------------------------------------
