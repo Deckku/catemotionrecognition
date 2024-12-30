@@ -675,7 +675,6 @@ En téléchargeant une photo, une vidéo ou un enregistrement audio d'un chat, l
 5. Images du produit fini
 -------------------------
 
-Voici une représentation visuelle des spectrogrammes combinés pour chaque classe :
 
 .. image:: 1.jpg
     :alt: Demo Image
