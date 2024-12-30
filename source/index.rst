@@ -202,7 +202,7 @@ Image des spectrogrammes combinés
 
 Voici une représentation visuelle des spectrogrammes combinés pour chaque classe :
 
-.. image:: imagedoc/combined_mel_spectrograms.png
+.. image:: 123.jpg
     :alt: Spectrogrammes combinés
     :width: 800px
     :align: center
