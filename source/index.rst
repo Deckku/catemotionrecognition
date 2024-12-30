@@ -221,8 +221,50 @@ Mesures et résultats des tests effectués sur le modèle.
 Collecte des données
 Les images nécessaires ont été collectées à partir de diverses sources publiques et bases de données spécialisées, garantissant une diversité de visages et d'expressions émotionnelles. Des critères d’inclusion spécifiques, tels que la résolution et la qualité des images, ont été définis pour assurer la pertinence des données. Des autorisations ont été respectées pour les sources publiques afin de garantir un usage éthique.
 
-Prétraitement des données
-Les images collectées ont été redimensionnées pour uniformiser les dimensions, converties en échelles de gris pour réduire la complexité et augmentées artificiellement pour diversifier le jeu de données. Les techniques incluaient la rotation, le recadrage et les ajustements d’éclairage pour améliorer la robustesse du modèle.
+3. Préparation des données audio
+---------------------------------
+Nettoyage, transformation en spectrogrammes, normalisation et encodage des étiquettes.
+
+.. code-block:: python
+
+    def clean_audio(y, sr, low_freq=200, high_freq=8000):
+        y_filtered = librosa.effects.preemphasis(y)
+        stft = librosa.stft(y_filtered, n_fft=2048, hop_length=512)
+        freqs = librosa.fft_frequencies(sr=sr, n_fft=2048)
+        mask = (freqs >= low_freq) & (freqs <= high_freq)
+        stft_filtered = stft[mask, :]
+        return librosa.istft(stft_filtered, hop_length=512)
+
+    def extract_spectrogram(y, sr, max_pad_len=128):
+        try:
+            S = librosa.feature.melspectrogram(y=y, sr=sr, n_mels=128, fmax=sr / 2)
+            log_S = librosa.power_to_db(S, ref=np.max)
+            pad_width = max_pad_len - log_S.shape[1]
+            return np.pad(log_S, ((0, 0), (0, pad_width)), mode='constant') if pad_width > 0 else log_S[:, :max_pad_len]
+        except Exception as e:
+            print(f"[ERREUR] Extraction du spectrogramme échouée : {e}")
+            return None
+
+    def load_audio_files(base_dir, max_pad_len=128):
+        audio_data, labels = [], []
+        for label in os.listdir(base_dir):
+            folder_path = os.path.join(base_dir, label)
+            if not os.path.isdir(folder_path):
+                continue
+
+            for file in os.listdir(folder_path):
+                if file.endswith('.mp3'):
+                    try:
+                        y, sr = librosa.load(os.path.join(folder_path, file), sr=22050)
+                        y_cleaned = clean_audio(y, sr)
+                        spectrogram = extract_spectrogram(y_cleaned, sr, max_pad_len)
+                        if spectrogram is not None:
+                            audio_data.append(spectrogram)
+                            labels.append(label)
+                    except Exception as e:
+                        print(f"[ERREUR] Erreur lors du traitement de {file}: {e}")
+
+        return np.array(audio_data), np.array(labels)
 
 Construction des modèles
 Une architecture CNN (Convolutional Neural Network) a été choisie pour ses performances éprouvées dans le traitement d'images. Le modèle a été construit avec plusieurs couches convolutives suivies de couches de pooling et d’une couche dense finale. L’optimisation a été réalisée à l’aide de l’algorithme Adam, et des fonctions d’activation ReLU ont été utilisées.
