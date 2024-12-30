@@ -207,12 +207,6 @@ Voici une représentation visuelle des spectrogrammes combinés pour chaque clas
     :width: 800px
     :align: center
 
-### Construction des modèles
-On a conçu un modèle CNN.
-
-### Évaluation des performances
-Mesures et résultats des tests effectués sur le modèle.
-
 ---
 
 4. Reconnaissance des émotions du chat par l’image
