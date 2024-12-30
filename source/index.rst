@@ -247,7 +247,8 @@ Nettoyage, transformation en spectrogrammes, normalisation et encodage des étiq
 Une architecture CNN (Convolutional Neural Network) a été choisie pour ses performances éprouvées dans le traitement d'images. Le modèle a été construit avec plusieurs couches convolutives suivies de couches de pooling et d’une couche dense finale. L’optimisation a été réalisée à l’aide de l’algorithme Adam, et des fonctions d’activation ReLU ont été utilisées.
 
 .. code-block:: python
- def create_cnn_model(input_shape=(IMG_HEIGHT, IMG_WIDTH, 3), num_classes=NUM_CLASSES):
+
+    def create_cnn_model(input_shape=(IMG_HEIGHT, IMG_WIDTH, 3), num_classes=NUM_CLASSES):
     model = models.Sequential([
         layers.Conv2D(32, (3, 3), activation='relu', input_shape=input_shape),
         layers.MaxPooling2D((2, 2)),
@@ -260,12 +261,8 @@ Une architecture CNN (Convolutional Neural Network) a été choisie pour ses per
     model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
     return model
 
-Évaluation des performances
-Les performances du modèle ont été mesurées à l’aide d’indicateurs tels que l’exactitude, la précision, et le rappel. Les résultats montrent un taux de reconnaissance des émotions supérieur à 85 % sur le jeu de test, démontrant la capacité du modèle à généraliser efficacement sur des données non vues.
 
----
-
-5. Reconnaissance de l’état de santé du chat par l’image
+4. Reconnaissance de l’état de santé du chat par l’image
 ==========================================================
 
 
