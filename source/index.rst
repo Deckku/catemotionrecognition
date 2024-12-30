@@ -672,11 +672,9 @@ En téléchargeant une photo, une vidéo ou un enregistrement audio d'un chat, l
 
 
 ---
-5. Images du produit fini
--------------------------
 
 
-.. image:: 1.jpg
+.. image:: catemotionrecognition\source\1.png
     :alt: Demo Image
     :width: 800px
     :align: center
