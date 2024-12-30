@@ -158,7 +158,7 @@ Nettoyage, transformation en spectrogrammes, normalisation et encodage des étiq
 
         return np.array(audio_data), np.array(labels)
 
-3. Creation du modele CNN
+4. Creation du modele CNN
 ---------------------------------
 .. code-block:: python
 
@@ -191,7 +191,7 @@ Nettoyage, transformation en spectrogrammes, normalisation et encodage des étiq
 
 
 
-Traitement des ensembles : entraînement, validation et test
+5. Traitement des ensembles : entraînement, validation et test
 -----------------------------------------------------------
 
 .. code-block:: python
@@ -213,7 +213,7 @@ Traitement des ensembles : entraînement, validation et test
 
         return X_train, X_val, X_test, y_train, y_val, y_test, label_encoder
 
-Visualisation de spectrogrammes aléatoires
+6. Visualisation de spectrogrammes aléatoires
 ------------------------------------------
 
 .. code-block:: python
@@ -232,7 +232,7 @@ Visualisation de spectrogrammes aléatoires
     )
     display_random_spectrograms(X_train, y_train, label_encoder.classes_)
 
-Image des spectrogrammes combinés
+7. Image des spectrogrammes combinés
 ---------------------------------
 
 Voici une représentation visuelle des spectrogrammes combinés pour chaque classe :
@@ -243,6 +243,19 @@ Voici une représentation visuelle des spectrogrammes combinés pour chaque clas
     :align: center
 
 ---
+
+8. Entraînement du modèle
+--------------------------
+
+.. code-block:: python
+
+    # Entraînement du modèle
+    history = model.fit(
+        X_train, y_train,
+        validation_data=(X_val, y_val),
+        epochs=30,
+        batch_size=32
+    )
 
 4. Reconnaissance des émotions du chat par l’image
 ==================================================
