@@ -18,9 +18,9 @@ AUDIO_CLASSES = ['Angry', 'Defence', 'Fighting', 'Happy', 'HuntingMind', 'Mating
 
 # Load trained models
 try:
-    image_model = load_model('C:\\Users\\adnan\\Desktop\\IA\\Project 2\\maybe3.h5')
-    sickness_model = load_model('C:\\Users\\adnan\\Desktop\\IA\\Project 2\\sicknormalf.h5')
-    audio_model = load_model('C:\\Users\\adnan\\Desktop\\IA\\Project 2\\issa.h5')
+    image_model = load_model('catemotionrecognition\\progress\\maybe3.h5')
+    sickness_model = load_model('catemotionrecognition\\progress\\sicknormalf.h5')
+    audio_model = load_model('catemotionrecognition\\progress\\issa.h5')
 except:
     messagebox.showerror("Error", "Could not load one or more models. Please check if model files exist.")
     exit()
