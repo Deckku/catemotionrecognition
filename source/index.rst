@@ -674,20 +674,20 @@ En téléchargeant une photo, une vidéo ou un enregistrement audio d'un chat, l
 ---
 
 
-.. image:: catemotionrecognition\\source\\1.png
-    :alt: Demo Image
-    :width: 800px
-    :align: center
+.. image:: /_static/catemotionrecognition/source/1.png
+   :alt: Demo Image
+   :width: 800px
+   :align: center
 
-.. image:: 2.jpg
-    :alt: Demo vid
-    :width: 800px
-    :align: center
+.. image:: /_static/2.jpg
+   :alt: Demo vid
+   :width: 800px
+   :align: center
 
-.. image:: 3.jpg
-    :alt: Demo Image
-    :width: 800px
-    :align: center
+.. image:: /_static/3.jpg
+   :alt: Demo Image
+   :width: 800px
+   :align: center
 
 8. Conclusion
 =============
