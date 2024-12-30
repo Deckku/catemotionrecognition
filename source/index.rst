@@ -262,14 +262,43 @@ Une architecture CNN (Convolutional Neural Network) a été choisie pour ses per
     model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
     return model
 
+4. Classes de Reconnaissance des Émotions Basée sur l'Image
+--------------------------------------------------------
 
-4. Reconnaissance de l’état de santé du chat par l’image
+Dans le cadre de l'analyse des émotions des chats à partir d'images, nous avons utilisé un modèle de réseau de neurones convolutifs (CNN) pour identifier les émotions des chats à partir de photos. Les classes d'émotions que le modèle est capable de reconnaître sont les suivantes :
+
+1. **Angry (En colère)** : Cette émotion indique que le chat se sent en colère, souvent en réponse à une menace ou une perturbation. Les signes de colère peuvent inclure des oreilles pointées en arrière, des yeux dilatés et une posture tendue.
+
+2. **Beg (Mendiant)** : Lorsque le chat cherche de l'attention ou de la nourriture, il peut adopter une posture de "mendicité". Cela inclut souvent une attitude de sollicitation, comme se frotter contre les jambes ou regarder fixement en direction de la nourriture.
+
+3. **Annoyed (Agacé)** : Un chat peut être agacé lorsqu'il est dérangé, même de manière subtile. Les signes incluent souvent une posture tendue ou un regard distant.
+
+4. **Frightened (Effrayé)** : Lorsque le chat ressent de la peur, il peut se figer, ses yeux deviennent plus larges et ses oreilles se replient. Il essaie souvent d'éviter la situation qui provoque cette peur.
+
+5. **Happy (Heureux)** : Un chat heureux est souvent détendu, avec des yeux mi-clos et une posture douce. Le ronronnement est aussi un indicateur clé d'une émotion positive chez les chats.
+
+6. **Normal (Normal)** : Un chat dans un état émotionnel "normal" montre des signes de calme et de confort. Il peut être dans une posture détendue sans aucune indication de stress ou d'agression.
+
+7. **Sad (Triste)** : Un chat triste peut montrer des signes de dépression ou de désintérêt, comme une posture affaissée, des yeux mi-clos ou une perte d'appétit.
+
+8. **Scared (Effrayé)** : Similaire à "Frightened", mais souvent avec un sentiment plus intense. Un chat effrayé peut être plus réactif et chercher à fuir.
+
+9. **Under the Weather (Pas bien)** : Un chat "pas bien" peut sembler léthargique, avoir une posture plus repliée, et montrer moins d'intérêt pour son environnement, ce qui peut indiquer qu'il est malade ou fatigué.
+
+10. **Curious (Curieux)** : Un chat curieux montre souvent des signes d'exploration, comme une attention accrue aux nouveaux objets ou environnements, avec des oreilles en avant et une posture droite.
+
+11. **Playful (Joueur)** : Un chat joueur adopte une posture excitée, souvent avec les pattes avant étendues ou en train de sauter autour d'un objet, montrant une énergie ludique et curieuse.
+
+Ces classes sont utilisées pour déterminer l'état émotionnel général du chat à partir de ses expressions faciales et de son comportement visible sur les images. L'objectif est de mieux comprendre le bien-être des chats et d'offrir une méthode non intrusive pour observer leurs émotions.
+
+
+5. Reconnaissance de l’état de santé du chat par l’image
 ==========================================================
 
 1. Collecte des données
 -----------------------
 
-Chaque image est lue, redimensionnée, normalisée et étiquetée avec une catégorie spécifique correspondant à l’émotion ou à l'état de santé.
+Chaque image est lue, redimensionnée, normalisée et étiquetée avec une catégorie spécifique correspondant à l'état de santé.
 
 2. Construction du modele
 ---------------------------------
@@ -294,8 +323,9 @@ Une architecture CNN (Convolutional Neural Network) a été choisie pour ses per
 
 Dans ce cas, les images doivent être étiquetées pour deux classes principales :
 
-Sick : Images représentant un chat malade, avec des signes visibles de maladie.
-Not Sick : Images représentant un chat en bonne santé, sans signes de maladie.
+**Sick** : Images représentant un chat malade, avec des signes visibles de maladie.
+**Healthy** : Images représentant un chat en bonne santé, sans signes de maladie.
+
 Les images peuvent provenir de diverses sources, mais elles doivent être étiquetées avec précision pour garantir la performance du modèle. Le prétraitement des données reste similaire à ce qui a été décrit précédemment, en redimensionnant et en normalisant les images.
 
 
@@ -309,10 +339,12 @@ Les images peuvent provenir de diverses sources, mais elles doivent être étiqu
 
 Le but de cette étape est de combiner les trois modèles de traitement d'image pour offrir une solution complète de classification vidéo. Ces modèles incluent :
 
-Modèle de reconnaissance des émotions du chat : Ce modèle identifie les émotions du chat à partir d'images fixes, telles que l'angoisse, la joie, la peur, etc.
-Modèle de reconnaissance de l'état de santé du chat : Ce modèle est chargé de déterminer si le chat est malade ou en bonne santé en analysant des images.
-Modèle de traitement vidéo : Cette partie combine les prédictions des deux premiers modèles sur chaque image d'une vidéo pour fournir des résultats dynamiques (sur les émotions et l'état de santé) tout au long de la séquence vidéo.
-Stratégies pour combiner les modèles
+**Modèle de reconnaissance des émotions du chat** : Ce modèle identifie les émotions du chat à partir d'images fixes, telles que l'angoisse, la joie, la peur, etc.
+**Modèle de reconnaissance de l'état de santé du chat** : Ce modèle est chargé de déterminer si le chat est malade ou en bonne santé en analysant des images.
+**Modèle de traitement vidéo** : Cette partie combine les prédictions des deux premiers modèles sur chaque image d'une vidéo pour fournir des résultats dynamiques (sur les émotions et l'état de santé) tout au long de la séquence vidéo.
+
+Stratégies pour combiner les modèles:
+
 Le défi ici est d'intégrer ces deux modèles (émotions et santé) dans une chaîne de traitement vidéo. Voici les principales étapes de la combinaison des modèles :
 
 Extraction des images vidéo : Pour analyser une vidéo, il faut d'abord en extraire les images (frames). Ces images sont ensuite envoyées aux deux modèles pour obtenir des prédictions individuelles.
