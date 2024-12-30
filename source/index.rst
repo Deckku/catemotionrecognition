@@ -473,7 +473,7 @@ En téléchargeant une photo, une vidéo ou un enregistrement audio d'un chat, l
             return "I'm not confident this is a cat image, or the image might be unclear. Please try uploading a clearer picture of a cat! 🐱"
         
         messages = {
-            "happy": "Your cat seems to be in a great mood! 😊", "sad": "Aww, your cat might need some extra love and attention right now 💕",
+            "happy": "Your cat seems to be in a great mood! ", "sad": "Aww, your cat might need some extra love and attention right now 💕",
             "angry": "Looks like someone woke up on the wrong side of the bed! 😾", "sick": "Your cat might not be feeling well. Consider a vet visit! 🏥",
             "normal": "Your cat appears to be healthy! 🌟", "beg": "Your cat is begging for something. Maybe it's time for a treat! 🍖",
             "annoyed": "Your cat seems annoyed. It might need some space. 😒", "frightened": "Your cat seems frightened. Try to comfort it. 😨",
