@@ -370,7 +370,267 @@ Suivi dynamique dans la vidéo : En utilisant une fenêtre temporelle (par exemp
 
 7. Déploiement
 ==============
-Étapes pour déployer la solution sur tkinter et l’application de bureau, avec les outils et frameworks utilisés.
+## Vue d'ensemble
+
+L'application **Cat Mood & Health Analyzer** a été créée en utilisant **Tkinter**, une bibliothèque Python pour la création d'interfaces graphiques. L'interface est conçue pour être simple et intuitive, permettant à l'utilisateur de télécharger des fichiers multimédia (images, vidéos, ou audio) via un bouton de sélection. Lorsqu'un fichier est téléchargé, l'application traite le contenu à l'aide de modèles pré-entrainés pour analyser les émotions, l'état de santé et l'humeur du chat. Les résultats sont affichés dans l'interface, accompagnés d'un message personnalisé. L'application comprend également un système de gestion des erreurs pour informer l'utilisateur de tout problème de traitement. Enfin, l'application peut être convertie en un exécutable autonome à l'aide de **PyInstaller** pour une utilisation sans installation préalable de Python.
+
+## Aperçu
+
+Le Cat Mood & Health Analyzer est une application conviviale conçue pour analyser l'humeur et l'état de santé des chats à partir de divers fichiers multimédias, tels que des images, des vidéos et des enregistrements audio. En utilisant des modèles d'apprentissage automatique avancés, l'outil offre des informations sur les émotions et le bien-être de votre chat. L'application utilise trois modèles principaux :
+
+1. **Modèle de reconnaissance des émotions** : Ce modèle prédit l'état émotionnel d'un chat à partir des images, en le classant dans des catégories telles que heureux, triste, en colère ou joueur.
+2. **Modèle de détection de maladie** : En utilisant des images, ce modèle évalue si le chat est en bonne santé ou potentiellement malade, en fournissant une classification "normal" ou "malade".
+3. **Modèle d'analyse de l'humeur audio** : Ce modèle traite les fichiers audio, tels que les miaulements ou les ronronnements, pour détecter différents états ou humeurs, tels que la colère, la joie et la douleur.
+
+En téléchargeant une photo, une vidéo ou un enregistrement audio d'un chat, les utilisateurs peuvent recevoir une analyse détaillée comprenant l'état émotionnel du chat, son état de santé et son humeur audio, aidant ainsi les propriétaires à mieux comprendre les besoins de leur chat. L'interface graphique intuitive facilite l'interaction, et elle fournit des résultats en temps réel avec des retours détaillés basés sur l'analyse.
+
+## Fonctionnalités
+
+- **Analyse d'image** : Téléchargez une image nette de votre chat pour la prédiction de l'émotion et de la santé.
+- **Analyse vidéo** : Téléchargez des vidéos, et l'application traitera à la fois le contenu visuel et audio pour fournir une analyse plus complète.
+- **Analyse audio** : Téléchargez des fichiers audio des sons de votre chat pour la détection de l'humeur.
+- **Interface conviviale** : Le design simple et moderne le rend accessible à tous les amoureux des chats, des propriétaires occasionnels aux professionnels.
+- **Retour en temps réel** : Recevez immédiatement un retour sur l'état émotionnel et de santé de votre chat avec des messages faciles à comprendre.
+
+## Commencer
+
+1. Lancez l'application.
+2. Téléchargez une image, une vidéo ou un fichier audio de votre chat.
+3. L'application analysera le fichier et fournira un rapport détaillé sur l'humeur, l'état de santé et les sons associés de votre chat.
+4. Si une vidéo est téléchargée, les analyses visuelles et audio seront traitées.
+5. Consultez les résultats et utilisez les informations pour mieux prendre soin de votre chat.
+
+
+.. code-block:: python
+
+    import tkinter as tk
+    from tkinter import filedialog, messagebox, ttk
+    import numpy as np
+    import cv2
+    import librosa
+    from tensorflow.keras.models import load_model
+    from tensorflow.keras.preprocessing.image import img_to_array, load_img
+    from PIL import Image, ImageTk
+    import os
+    import subprocess
+
+    # Constants
+    IMG_HEIGHT, IMG_WIDTH = 128, 128
+    IMAGE_CLASSES = ["angry", "beg", "annoyed", "frightened", "happy", "normal", "sad", "scared", "under the weather", "curious", "playful"]
+    SICKNESS_CLASSES = ["normal", "sick"]
+    AUDIO_CLASSES = ['Angry', 'Defence', 'Fighting', 'Happy', 'HuntingMind', 'Mating', 'MotherCall', 'Paining', 'Resting', 'Warning']
+
+    # Load models
+    try:
+        image_model = load_model('catemotionrecognition\\progress\\maybe3.h5')
+        sickness_model = load_model('catemotionrecognition\\progress\\sicknormalf.h5')
+        audio_model = load_model('catemotionrecognition\\progress\\issa.h5')
+    except:
+        messagebox.showerror("Error", "Could not load models. Please check if model files exist.")
+        exit()
+
+    def get_friendly_message(emotion, sickness, confidence, mood=None):
+        if confidence < 0.1:
+            return "I'm not confident this is a cat image, or the image might be unclear. Please try uploading a clearer picture of a cat! 🐱"
+        
+        messages = {
+            "happy": "Your cat seems to be in a great mood! 😊", "sad": "Aww, your cat might need some extra love and attention right now 💕",
+            "angry": "Looks like someone woke up on the wrong side of the bed! 😾", "sick": "Your cat might not be feeling well. Consider a vet visit! 🏥",
+            "normal": "Your cat appears to be healthy! 🌟", "beg": "Your cat is begging for something. Maybe it's time for a treat! 🍖",
+            "annoyed": "Your cat seems annoyed. It might need some space. 😒", "frightened": "Your cat seems frightened. Try to comfort it. 😨",
+            "scared": "Your cat is scared. It might need some reassurance. 😱", "under the weather": "Your cat seems under the weather. Keep an eye on it. 🌧️",
+            "curious": "Your cat is curious about something. Let it explore! 🕵️", "playful": "Your cat is feeling playful. Time for some fun! 🧶"
+        }
+        
+        audio_messages = {
+            'Angry': "Your cat is expressing anger or frustration. They might need some space! 😾", 'Defence': "Your cat is in a defensive mode - they might feel threatened 🛡️",
+            'Fighting': "Your cat is showing aggressive behavior - best to keep distance! ⚔️", 'Happy': "Your cat is expressing joy and contentment! 😺",
+            'HuntingMind': "Your cat is in hunting mode - they're feeling predatory! 🐾", 'Mating': "Your cat is making mating calls 💕",
+            'MotherCall': "Your cat is making nurturing sounds, typical of mother cats! 🤱", 'Paining': "Your cat might be in pain or distress - consider a vet visit! 🏥",
+            'Resting': "Your cat is making peaceful, relaxed sounds 😴", 'Warning': "Your cat is trying to warn about something - they might feel unsafe! ⚠️"
+        }
+        
+        base_message = f"I think your cat is feeling {emotion}. "
+        health_message = "They appear to be healthy! 🌟" if sickness == "normal" else "They might not be feeling well - consider a check-up! 🏥"
+        
+        if mood:
+            mood_message = f"\nBased on their vocalizations: {audio_messages.get(mood, f'They seem to be in a {mood.lower()} state.')}"
+
+        return base_message + health_message
+
+    def process_image(image_path):
+        try:
+            image = load_img(image_path, target_size=(IMG_HEIGHT, IMG_WIDTH))
+            img_array = img_to_array(image) / 255.0
+            img_array = np.expand_dims(img_array, axis=0)
+
+            emotion_predictions = image_model.predict(img_array, verbose=0)
+            predicted_emotion = IMAGE_CLASSES[np.argmax(emotion_predictions)]
+            confidence = np.max(emotion_predictions)
+
+            sickness_predictions = sickness_model.predict(img_array, verbose=0)
+            predicted_sickness = SICKNESS_CLASSES[np.argmax(sickness_predictions)]
+
+            return predicted_emotion, predicted_sickness, confidence
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to process image: {str(e)}")
+            return None, None, None
+
+    def extract_audio(video_path):
+        try:
+            temp_audio = os.path.join(os.path.dirname(video_path), "temp_audio.wav")
+            command = f"ffmpeg -i \"{video_path}\" -q:a 0 -map a \"{temp_audio}\" -y"
+            subprocess.run(command, shell=True, check=True)
+            return temp_audio
+        except Exception as e:
+            messagebox.showerror("Error", f"Audio extraction error: {str(e)}")
+            return None
+
+    def process_audio(audio_path):
+        try:
+            y, sr = librosa.load(audio_path, duration=3)
+            mel_spect = librosa.feature.melspectrogram(y=y, sr=sr)
+            mel_spect = librosa.power_to_db(mel_spect, ref=np.max)
+            mel_spect = cv2.resize(mel_spect, (128, 128))
+            mel_spect = np.expand_dims(mel_spect, axis=-1)
+            mel_spect = np.expand_dims(mel_spect, axis=0)
+
+            audio_predictions = audio_model.predict(mel_spect, verbose=0)
+            predicted_mood = AUDIO_CLASSES[np.argmax(audio_predictions)]
+            
+            return predicted_mood
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to process audio: {str(e)}")
+            return None
+
+    def process_video(video_path):
+        try:
+            cap = cv2.VideoCapture(video_path)
+            ret, frame = cap.read()
+            if not ret:
+                messagebox.showerror("Error", "Could not read video frame")
+                return None, None, None, None
+
+            temp_frame = os.path.join(os.path.dirname(video_path), "temp_frame.jpg")
+            cv2.imwrite(temp_frame, frame)
+            
+            emotion, sickness, confidence = process_image(temp_frame)
+            if os.path.exists(temp_frame):
+                os.remove(temp_frame)
+            cap.release()
+
+            audio_mood = None
+            temp_audio = extract_audio(video_path)
+            if temp_audio:
+                audio_mood = process_audio(temp_audio)
+                if os.path.exists(temp_audio):
+                    os.remove(temp_audio)
+
+            if emotion and sickness:
+                return emotion, sickness, confidence, audio_mood
+            return None, None, None, None
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to process video: {str(e)}")
+            return None, None, None, None
+
+    def process_file():
+        file_path = filedialog.askopenfilename(
+            title="Select Your Cat Media",
+            filetypes=[("Media Files", "*.png;*.jpg;*.jpeg;*.mp4;*.avi;*.mov;*.wav;*.mp3")]
+        )
+        
+        if not file_path:
+            return
+
+        loading_label.config(text="Processing... Please wait! 🐱")
+        root.update()
+
+        try:
+            if file_path.lower().endswith(('.png', '.jpg', '.jpeg')):
+                emotion, sickness, confidence = process_image(file_path)
+                if emotion and sickness:
+                    friendly_message = get_friendly_message(emotion, sickness, confidence)
+                    result_label.config(text=friendly_message, wraplength=500)
+                    audio_result_label.config(text="No audio analysis available for images")
+                    
+                    image = Image.open(file_path)
+                    image.thumbnail((300, 300))
+                    photo = ImageTk.PhotoImage(image)
+                    screenshot_label.config(image=photo)
+                    screenshot_label.image = photo
+                    
+            elif file_path.lower().endswith(('.mp4', '.avi', '.mov')):
+                emotion, sickness, confidence, audio_mood = process_video(file_path)
+                if emotion and sickness:
+                    friendly_message = get_friendly_message(emotion, sickness, confidence, audio_mood)
+                    result_label.config(text=friendly_message, wraplength=500)
+
+                    if audio_mood:
+                        audio_result_label.config(text=f"Audio Analysis: {audio_messages.get(audio_mood)} 🔊", fg='#333333')
+                    else:
+                        audio_result_label.config(text="Audio analysis unavailable. Please ensure your video has audio.", fg='#666666')
+
+                    cap = cv2.VideoCapture(file_path)
+                    ret, frame = cap.read()
+                    if ret:
+                        frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                        image = Image.fromarray(frame_rgb)
+                        image.thumbnail((300, 300))
+                        photo = ImageTk.PhotoImage(image)
+                        screenshot_label.config(image=photo)
+                        screenshot_label.image = photo
+                    cap.release()
+
+            elif file_path.lower().endswith(('.wav', '.mp3')):
+                audio_mood = process_audio(file_path)
+                if audio_mood:
+                    result_label.config(text="Audio Analysis Only", wraplength=500)
+                    audio_result_label.config(text=f"{audio_messages.get(audio_mood)} 🔊", fg='#333333')
+                    screenshot_label.config(image='')
+
+            loading_label.config(text="")
+            
+        except Exception as e:
+            messagebox.showerror("Error", f"An error occurred: {str(e)}")
+            loading_label.config(text="")
+
+    root = tk.Tk()
+    root.title("🐱 Cat Mood & Health Analyzer")
+    root.geometry("800x800")
+    root.configure(bg='#f0f0f0')
+
+    style = ttk.Style()
+    style.configure('Custom.TButton', font=('Arial', 12))
+
+    header = tk.Label(root, text="Cat Mood & Health Analyzer", font=("Arial", 24, "bold"), bg='#f0f0f0', fg='#333333')
+    header.pack(pady=30)
+
+    description = tk.Label(root, text="Upload a photo, video, or audio file of your cat to analyze their mood and health status!", font=("Arial", 12), bg='#f0f0f0', fg='#666666', wraplength=600)
+    description.pack(pady=10)
+
+    process_button = ttk.Button(root, text="Upload Cat Media 📁", command=process_file, style='Custom.TButton')
+    process_button.pack(pady=20)
+
+    loading_label = tk.Label(root, text="", font=("Arial", 12), bg='#f0f0f0', fg='#666666')
+    loading_label.pack(pady=10)
+
+    result_frame = tk.Frame(root, bg='#f0f0f0')
+    result_frame.pack(pady=20, padx=50, fill='both', expand=True)
+
+    result_label = tk.Label(result_frame, text="Your cat's analysis will appear here! 😺", font=("Arial", 14), bg='#ffffff', fg='#333333', wraplength=500, pady=20, padx=20, relief='ridge', borderwidth=1)
+    result_label.pack(pady=20)
+
+    audio_result_label = tk.Label(result_frame, text="Audio analysis will appear here for videos and audio files! 🔊", font=("Arial", 14), bg='#ffffff', fg='#666666', wraplength=500, pady=20, padx=20, relief='ridge', borderwidth=1)
+    audio_result_label.pack(pady=20)
+
+    screenshot_label = tk.Label(root, bg='#f0f0f0')
+    screenshot_label.pack(pady=20)
+
+    footer = tk.Label(root, text="Made with ❤️ for cats everywhere", font=("Arial", 10), bg='#f0f0f0', fg='#999999')
+    footer.pack(pady=20)
+
+    root.mainloop()
+
 
 ---
 
