@@ -323,50 +323,50 @@ Fusion des résultats : Les prédictions des deux modèles peuvent être combin�
 Moyenne ou pondération des résultats des deux modèles pour une prise de décision finale par frame.
 
 Affichage des résultats combinés à chaque frame sous forme d'annotations (par exemple, afficher à la fois l'émotion du chat et son état de santé).
+
 Suivi dynamique dans la vidéo : En utilisant une fenêtre temporelle (par exemple, sur plusieurs frames), vous pouvez suivre l'évolution des émotions et de l'état de santé du chat au cours du temps. Cette approche peut être utilisée pour détecter des changements dans les émotions ou l'état de santé du chat dans la vidéo.
 
-.. code-block::python
+.. code-block:: python
 
+    def process_video(video_path):
+        try:
+            # Process video frame
+            cap = cv2.VideoCapture(video_path)
+            if not cap.isOpened():
+                messagebox.showerror("Error", "Could not open video file")
+                return None, None, None, None
 
-  def process_video(video_path):
-    try:
-        # Process video frame
-        cap = cv2.VideoCapture(video_path)
-        if not cap.isOpened():
-            messagebox.showerror("Error", "Could not open video file")
+            ret, frame = cap.read()
+            if not ret:
+                messagebox.showerror("Error", "Could not read video frame")
+                return None, None, None, None
+
+            temp_frame = os.path.join(os.path.dirname(video_path), "temp_frame.jpg")
+            cv2.imwrite(temp_frame, frame)
+            
+            # Process the frame for visual analysis
+            emotion, sickness, confidence = process_image(temp_frame)
+            if os.path.exists(temp_frame):
+                os.remove(temp_frame)
+            cap.release()
+
+            # Extract and process audio
+            audio_mood = None
+            temp_audio = extract_audio(video_path)
+            if temp_audio:
+                audio_mood = process_audio(temp_audio)
+                if os.path.exists(temp_audio):
+                    os.remove(temp_audio)
+            else:
+                messagebox.showwarning("Warning", "Could not analyze audio. Make sure the video contains audio.")
+
+            if emotion and sickness:
+                return emotion, sickness, confidence, audio_mood
             return None, None, None, None
 
-        ret, frame = cap.read()
-        if not ret:
-            messagebox.showerror("Error", "Could not read video frame")
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to process video: {str(e)}")
             return None, None, None, None
-
-        temp_frame = os.path.join(os.path.dirname(video_path), "temp_frame.jpg")
-        cv2.imwrite(temp_frame, frame)
-        
-        # Process the frame for visual analysis
-        emotion, sickness, confidence = process_image(temp_frame)
-        if os.path.exists(temp_frame):
-            os.remove(temp_frame)
-        cap.release()
-
-        # Extract and process audio
-        audio_mood = None
-        temp_audio = extract_audio(video_path)
-        if temp_audio:
-            audio_mood = process_audio(temp_audio)
-            if os.path.exists(temp_audio):
-                os.remove(temp_audio)
-        else:
-            messagebox.showwarning("Warning", "Could not analyze audio. Make sure the video contains audio.")
-
-        if emotion and sickness:
-            return emotion, sickness, confidence, audio_mood
-        return None, None, None, None
-
-    except Exception as e:
-        messagebox.showerror("Error", f"Failed to process video: {str(e)}")
-        return None, None, None, None
 
 7. Déploiement
 ==============
