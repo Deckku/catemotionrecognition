@@ -1,5 +1,5 @@
 # 🐱 Cat Companion Project
-<img width="515" alt="banner" src="https://github.com/user-attachments/assets/f3cfe3a0-98ef-4055-98a4-7420454059e2" />
+<img width="900" alt="banner" src="https://github.com/user-attachments/assets/f3cfe3a0-98ef-4055-98a4-7420454059e2" />
 
 An AI-powered application for real-time analysis of cat emotions and health status using multimodal machine learning.
 
@@ -188,9 +188,6 @@ We welcome contributions from the community! Whether you're interested in:
 
 - **Data Collection**: Help us gather more diverse cat images and sounds
 - **Model Improvement**: Enhance existing architectures or propose new ones
-- **Feature Development**: Add new functionality to the application
-- **Bug Reports**: Help us identify and fix issues
-- **Documentation**: Improve guides and tutorials
 
 Please read our contributing guidelines and code of conduct before submitting pull requests.
 
@@ -205,12 +202,11 @@ This project is licensed under [Insert License] - see the LICENSE file for detai
 - **Open Source Libraries**: TensorFlow, OpenCV, Librosa, and other amazing tools
 - **Cat Owners**: Everyone who helped test and improve the application
 
-## 📞 Support
-
-- **Issues**: Report bugs on our GitHub issues page
-- **Discussions**: Join our community discussions
-- **Documentation**: Check our wiki for detailed guides
-- **Contact**: [Insert contact information]
+## 📞 Created By
+- Azami Hassani Adnane/ad.azamihassani@edu.umi.ac.ma
+- Lamkharbech Issa/i.lamkharbech@edu.umi.ac.ma
+## 📞 Supervised By:
+Pr.Taoufik Masrour
 
 ---
 
