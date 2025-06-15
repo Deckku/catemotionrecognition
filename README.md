@@ -1,4 +1,5 @@
 # 🐱 Cat Companion Project
+<img width="515" alt="banner" src="https://github.com/user-attachments/assets/f3cfe3a0-98ef-4055-98a4-7420454059e2" />
 
 An AI-powered application for real-time analysis of cat emotions and health status using multimodal machine learning.
 
@@ -139,22 +140,24 @@ The application provides:
 ## 📸 Screenshots
 
 ### Main Interface
-![Main Application Interface](images/main_interface.png)
+<img width="521" alt="main" src="https://github.com/user-attachments/assets/aed1da71-3cec-4c82-a0e8-eadff6380d0d" />
 
 *The clean, user-friendly interface makes it easy to upload and analyze cat media files.*
 
 ### Image Analysis Results
-![Image Analysis Example](images/image_analysis.png)
+<img width="519" alt="Screenshot 2025-06-15 131148" src="https://github.com/user-attachments/assets/ad555ca7-65d0-4463-a10a-c84d1939d88b" />
+
 
 *Example of emotion and health analysis from a cat photo.*
 
 ### Video Processing
-![Video Analysis Example](images/video_analysis.png)
+<img width="517" alt="video" src="https://github.com/user-attachments/assets/acd8dfb0-1562-49bd-b143-2ab984638ebe" />
+
 
 *Combined visual and audio analysis from video files.*
 
 ### Audio Visualization
-![Audio Spectrogram](images/audio_spectrogram.png)
+<img width="512" alt="spectrogram" src="https://github.com/user-attachments/assets/881d080f-b3ba-463c-af81-c1ee2b718911" />
 
 *Mel-spectrogram visualization used for audio mood detection.*
 
